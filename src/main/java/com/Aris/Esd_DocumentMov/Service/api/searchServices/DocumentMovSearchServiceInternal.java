@@ -1,6 +1,8 @@
-package com.Aris.Esd_DocumentMov.Service.internalService;
+package com.Aris.Esd_DocumentMov.Service.api.searchServices;
 
-import com.Aris.Esd_DocumentMov.Service.internal.search.*;
+import com.Aris.Esd_DocumentMov.Service.api.searchServices.internal.ResponseSearchDocumentMov;
+import com.Aris.Esd_DocumentMov.Service.api.searchServices.internal.ResponseSearchListDocumentMov;
+import com.Aris.Esd_DocumentMov.Service.internal.ResponseForDocSend;
 import com.Aris.Esd_DocumentMov.db.entities.DocumentMov;
 import com.Aris.Esd_DocumentMov.db.repo.RepoDocumentMov;
 import org.slf4j.Logger;
@@ -8,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
 import java.util.List;
 
 @Component
@@ -19,6 +20,9 @@ public class DocumentMovSearchServiceInternal {
 
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+
+
 
     public ResponseSearchListDocumentMov getDocMovByIdEmpFrom(long idEmpFrom){
         List<DocumentMov> listOfidDocument= repoDocumentMov.findByIdEmployeeFromAndIsActive(idEmpFrom,1);
@@ -67,7 +71,7 @@ public class DocumentMovSearchServiceInternal {
 
 
     public ResponseSearchListDocumentMov getDocMovByIdDoc(long idDoc){
-        List<DocumentMov> listOfidDocument= repoDocumentMov.findByIdDocumentAndIsActive(idDoc,1);
+        List<DocumentMov> listOfidDocument= repoDocumentMov.findByIdDocumentAndIsDeleted(idDoc,0);
         ResponseSearchListDocumentMov response = new ResponseSearchListDocumentMov();
         try {
             if (listOfidDocument != null&&listOfidDocument.size()>0) {
@@ -178,18 +182,20 @@ public class DocumentMovSearchServiceInternal {
     }
 
 
-    public ResponseSearchListDocumentMov getDocMovByidDocByIsActive(long idDoc) {
-        List<DocumentMov> listOfdocumentMov = repoDocumentMov.findByIdDocumentAndIsActive(idDoc, 1);
-        ResponseSearchListDocumentMov response = new ResponseSearchListDocumentMov();
+    public ResponseSearchDocumentMov getDocMovByIdDocMovByIsActiveByIsDelete(long idDocMov,int isRead){
+        DocumentMov documentMov=repoDocumentMov.findByIdDocumentMovAndIsActiveAndIsDeleted(idDocMov,1,0);
+        ResponseSearchDocumentMov response = new ResponseSearchDocumentMov();
         try {
-            if (listOfdocumentMov != null && listOfdocumentMov.size() > 0) {
-                response.setListOfDocumentMov(listOfdocumentMov);
-                response.setServerMessage("DocumentMov found");
+            if (documentMov != null) {
+                documentMov.setIsRead(isRead);
                 response.setServerCode(200);
+                response.setDocumentMov(documentMov);
+                repoDocumentMov.save(documentMov);
+                response.setServerMessage("DocumentMov found");
                 logger.info("SearchDocumentMov response : {}", response.toString());
             } else {
+                response.setDocumentMov(null);
                 response.setServerCode(220);
-                response.setListOfDocumentMov(null);
                 response.setServerMessage("DocumentMov not found");
             }
         }catch (Exception e){
@@ -199,6 +205,32 @@ public class DocumentMovSearchServiceInternal {
         }
         return response;
     }
+
+
+
+
+//
+//    public ResponseSearchListDocumentMov getDocMovByidDocByIsActive(long idDoc) {
+//        List<DocumentMov> listOfdocumentMov = repoDocumentMov.findByIdDocumentAndIsActive(idDoc, 1);
+//        ResponseSearchListDocumentMov response = new ResponseSearchListDocumentMov();
+//        try {
+//            if (listOfdocumentMov != null && listOfdocumentMov.size() > 0) {
+//                response.setListOfDocumentMov(listOfdocumentMov);
+//                response.setServerMessage("DocumentMov found");
+//                response.setServerCode(200);
+//                logger.info("SearchDocumentMov response : {}", response.toString());
+//            } else {
+//                response.setServerCode(220);
+//                response.setListOfDocumentMov(null);
+//                response.setServerMessage("DocumentMov not found");
+//            }
+//        }catch (Exception e){
+//            response.setServerCode(100);
+//            response.setServerMessage("error"+e);
+//            logger.info("error",e);
+//        }
+//        return response;
+//    }
 
 
 

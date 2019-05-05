@@ -11,7 +11,8 @@ public interface RepoDocumentMov extends CrudRepository<DocumentMov,Long> {
 
     DocumentMov findByIdDocumentMovAndIsDeleted(long idDocMov,int isDelete);
 
-    List<DocumentMov> findByIdDocumentAndIsActive(long idDoc,int isActive);
+//    List<DocumentMov> findByIdDocumentAndIsActive(long idDoc,int isActive);
+    List<DocumentMov> findByIdDocumentAndIsDeleted(long idDoc,int isDelete);
 
     List<DocumentMov> findByIdEmployeeFromAndIsActive(long idEmpFrom,int isActive);
     List<DocumentMov> findByIdEmployeeToAndIsActiveOrderByIdDocumentDesc(long idEmpTo,int isActive);
@@ -20,5 +21,8 @@ public interface RepoDocumentMov extends CrudRepository<DocumentMov,Long> {
 
     List<DocumentMov>findByIsMesulAndIsActive(int isMesul,int isActive);
 
+    DocumentMov findByIdDocumentAndIsActiveAndIdEmployeeFrom(long idDocument,int isActive,long employeeFrom);
+
+    DocumentMov findByIdDocumentMovAndIsActiveAndIsDeleted(long idDocMov,int isActive,int isDelete);
 
 }

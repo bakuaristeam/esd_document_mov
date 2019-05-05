@@ -1,9 +1,10 @@
-package com.Aris.Esd_DocumentMov.Service.internal.crud;
+package com.Aris.Esd_DocumentMov.Service.api.crudServices.internal;
 
 import java.util.Date;
 
-public class SaveDocumentMovRequest {
+public class UpdateDocumentMovRequest {
 
+    private long idDocumentMov;
     private long idDocument;
     private long idEmployeeFrom;
     private long idEmployeeTo;
@@ -17,7 +18,8 @@ public class SaveDocumentMovRequest {
     private long finishDate;
     private int isMesul;
 
-    public SaveDocumentMovRequest(long idDocument, long idEmployeeFrom, long idEmployeeTo, int isActive, int isDeleted, String note, long sendDate, int isAccepted, int isRead, long readDate, long finishDate, int isMesul) {
+    public UpdateDocumentMovRequest(long idDocumentMov, long idDocument, long idEmployeeFrom, long idEmployeeTo, int isActive, int isDeleted, String note, long sendDate, int isAccepted, int isRead, long readDate, long finishDate, int isMesul) {
+        this.idDocumentMov = idDocumentMov;
         this.idDocument = idDocument;
         this.idEmployeeFrom = idEmployeeFrom;
         this.idEmployeeTo = idEmployeeTo;
@@ -32,13 +34,14 @@ public class SaveDocumentMovRequest {
         this.isMesul = isMesul;
     }
 
-    public SaveDocumentMovRequest() {
+    public UpdateDocumentMovRequest() {
     }
 
     @Override
     public String toString() {
-        return "SaveDocumentMovRequest{" +
-                "idDocument=" + idDocument +
+        return "UpdateDocumentMovRequest{" +
+                "idDocumentMov=" + idDocumentMov +
+                ", idDocument=" + idDocument +
                 ", idEmployeeFrom=" + idEmployeeFrom +
                 ", idEmployeeTo=" + idEmployeeTo +
                 ", isActive=" + isActive +
@@ -51,6 +54,14 @@ public class SaveDocumentMovRequest {
                 ", finishDate=" + finishDate +
                 ", isMesul=" + isMesul +
                 '}';
+    }
+
+    public long getIdDocumentMov() {
+        return idDocumentMov;
+    }
+
+    public void setIdDocumentMov(long idDocumentMov) {
+        this.idDocumentMov = idDocumentMov;
     }
 
     public long getIdDocument() {

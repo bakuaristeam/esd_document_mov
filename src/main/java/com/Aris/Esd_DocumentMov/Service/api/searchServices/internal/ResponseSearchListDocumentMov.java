@@ -1,4 +1,4 @@
-package com.Aris.Esd_DocumentMov.Service.internal.search;
+package com.Aris.Esd_DocumentMov.Service.api.searchServices.internal;
 
 import com.Aris.Esd_DocumentMov.db.entities.DocumentMov;
 

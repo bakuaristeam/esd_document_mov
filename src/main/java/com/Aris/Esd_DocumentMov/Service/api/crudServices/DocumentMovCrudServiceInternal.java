@@ -1,8 +1,8 @@
-package com.Aris.Esd_DocumentMov.Service.internalService;
+package com.Aris.Esd_DocumentMov.Service.api.crudServices;
 
 import com.Aris.Esd_DocumentMov.Service.internal.*;
-import com.Aris.Esd_DocumentMov.Service.internal.crud.SaveDocumentMovRequest;
-import com.Aris.Esd_DocumentMov.Service.internal.crud.UpdateDocumentMovRequest;
+import com.Aris.Esd_DocumentMov.Service.api.crudServices.internal.SaveDocumentMovRequest;
+import com.Aris.Esd_DocumentMov.Service.api.crudServices.internal.UpdateDocumentMovRequest;
 import com.Aris.Esd_DocumentMov.db.entities.DocumentMov;
 import com.Aris.Esd_DocumentMov.db.repo.RepoDocumentMov;
 import org.slf4j.Logger;
@@ -19,6 +19,29 @@ public class DocumentMovCrudServiceInternal {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    public ResponseForDocSend updateDocMoveForDocSend(long idEmpFrom, long idDocument){
+        ResponseForDocSend response  =  new ResponseForDocSend();
+        try{
+            DocumentMov docMov = repoDocumentMov.findByIdDocumentAndIsActiveAndIdEmployeeFrom(idDocument, 1, idEmpFrom);
+            if(docMov!=null){
+                docMov.setIsActive(0);
+                repoDocumentMov.save(docMov);
+                response.setServerCode(200);
+                response.setServerMessage("Doc send");
+            }else{
+                logger.info("doc move not found maybe its first move..");
+                response.setServerCode(200);
+                response.setServerMessage("its first time move");
+            }
+        }catch (Exception e){
+            response.setServerCode(100);
+            response.setServerMessage("Problem occurred when sending doc");
+            logger.error("Error sending doc : ",e);
+        }
+        return response;
+    }
+
+
     public DocumentMovResponse saveDocumentMov(SaveDocumentMovRequest saveDocumentMovRequest) {
         DocumentMovResponse documentMovResponse= new DocumentMovResponse();
         try {
@@ -30,7 +53,7 @@ public class DocumentMovCrudServiceInternal {
             documentMov.setIsDeleted(saveDocumentMovRequest.getIsDeleted());
             documentMov.setNote(saveDocumentMovRequest.getNote());
             documentMov.setSendDate(saveDocumentMovRequest.getSendDate());
-            documentMov.setIsAccepted(1);
+            documentMov.setIsAccepted(0);
             documentMov.setIsRead(0);
             documentMov.setReadDate(saveDocumentMovRequest.getReadDate());
             documentMov.setFinishDate(saveDocumentMovRequest.getFinishDate());
@@ -40,12 +63,12 @@ public class DocumentMovCrudServiceInternal {
            documentMovResponse.setDocumentMov(documentMov);
             documentMovResponse.setServerCode(200);
             documentMovResponse.setServerMessage("OK");
-            documentMovResponse.setStatusMessage("Saveeeeeeed");
+            documentMovResponse.setStatusMessage("Saved");
             logger.info("saveDocument response : {}", saveDocumentMovRequest.toString());
         } catch (Exception e) {
             documentMovResponse.setServerCode(100);
-            documentMovResponse.setServerMessage("erooor");
-            documentMovResponse.setStatusMessage("No Saveeeeeeed");
+            documentMovResponse.setServerMessage("error");
+            documentMovResponse.setStatusMessage("No Saved");
             logger.error("Error save file text : {}", e);
         }
         return documentMovResponse;
@@ -118,7 +141,7 @@ public class DocumentMovCrudServiceInternal {
             }
         } catch (Exception e) {
             documentMovResponse.setServerCode(100);
-            documentMovResponse.setServerMessage("erooor");
+            documentMovResponse.setServerMessage("error");
             documentMovResponse.setStatusMessage("No Update");
             logger.error("Error delete file text : {}", e);
         }

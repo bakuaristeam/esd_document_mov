@@ -1,7 +1,8 @@
-package com.Aris.Esd_DocumentMov.Service.api;
+package com.Aris.Esd_DocumentMov.Service.api.searchServices;
 
-import com.Aris.Esd_DocumentMov.Service.internal.search.*;
-import com.Aris.Esd_DocumentMov.Service.internalService.DocumentMovSearchServiceInternal;
+import com.Aris.Esd_DocumentMov.Service.api.searchServices.internal.ResponseSearchDocumentMov;
+import com.Aris.Esd_DocumentMov.Service.api.searchServices.internal.ResponseSearchListDocumentMov;
+import com.Aris.Esd_DocumentMov.Service.internal.ResponseForDocSend;
 import com.Aris.Esd_DocumentMov.db.entities.DocumentMov;
 import com.Aris.Esd_DocumentMov.db.repo.RepoDocumentMov;
 import org.slf4j.Logger;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class DocumentMocSearchServices {
     RepoDocumentMov repoDocumentMov;
 
     @GetMapping("/getDocMovByIdDoc/{idDoc}")
-    public ResponseSearchListDocumentMov getDocMovByIdDocument(@PathVariable("idDoc") long idDoc){
+    public ResponseSearchListDocumentMov getDocMovByIdDocumentIsDelete(@PathVariable("idDoc") long idDoc){
         logger.info("esd_DocumentMov_idDocument->search->request : {}",idDoc);
         return documentMovSearchServiceInternal.getDocMovByIdDoc(idDoc);
     }
@@ -70,11 +70,21 @@ public class DocumentMocSearchServices {
         return documentMovSearchServiceInternal.getDocMovByIsMesul(isMesul);
     }
 
-    @GetMapping("/getDocMovByIdDocByIsActive/{idDoc}")
-    public ResponseSearchListDocumentMov getDocMovByIdDocByIsActive(@PathVariable("idDoc") long idDoc){
-        logger.info("esd_DocumentMov_idDocAndIsVisible->search->request : {}",idDoc);
-        return documentMovSearchServiceInternal.getDocMovByidDocByIsActive(idDoc);
+
+    @GetMapping("/setDocReadStatus/{idDocMov}/{isRead}")
+    public ResponseSearchDocumentMov setDocReadStatus(@PathVariable("idDocMov") long idDocMov,
+                                                      @PathVariable("isRead")int isRead){
+        logger.info("esd_DocumentMov_idDocumentMovIsActiveIsDelete->search->request : {}",idDocMov,isRead);
+        return documentMovSearchServiceInternal.getDocMovByIdDocMovByIsActiveByIsDelete(idDocMov,isRead);
     }
+
+
+    //    @GetMapping("/getDocMovByIdDocByIsActive/{idDoc}")
+//    public ResponseSearchListDocumentMov getDocMovByIdDocByIsActive(@PathVariable("idDoc") long idDoc){
+//        logger.info("esd_DocumentMov_idDocAndIsVisible->search->request : {}",idDoc);
+//        return documentMovSearchServiceInternal.getDocMovByidDocByIsActive(idDoc);
+//    }
+
     @GetMapping("/documentMov/all")
     public List<DocumentMov> getStudents(){
         Iterator<DocumentMov> iterator= repoDocumentMov.findAll().iterator();
@@ -84,6 +94,7 @@ public class DocumentMocSearchServices {
         }
         return students;
     }
+
 
 
 }
