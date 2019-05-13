@@ -1,5 +1,7 @@
 package com.Aris.Esd_DocumentMov.Service.api.crudServices.internal;
 
+import org.springframework.lang.Nullable;
+
 import java.util.Date;
 
 public class UpdateDocumentMovRequest {
@@ -17,8 +19,11 @@ public class UpdateDocumentMovRequest {
     private long readDate;
     private long finishDate;
     private int isMesul;
+    private long parentId;
+    @Nullable
+    private String backNote;
 
-    public UpdateDocumentMovRequest(long idDocumentMov, long idDocument, long idEmployeeFrom, long idEmployeeTo, int isActive, int isDeleted, String note, long sendDate, int isAccepted, int isRead, long readDate, long finishDate, int isMesul) {
+    public UpdateDocumentMovRequest(long idDocumentMov, long idDocument, long idEmployeeFrom, long idEmployeeTo, int isActive, int isDeleted, String note, long sendDate, int isAccepted, int isRead, long readDate, long finishDate, int isMesul, long parentId, @Nullable String backNote) {
         this.idDocumentMov = idDocumentMov;
         this.idDocument = idDocument;
         this.idEmployeeFrom = idEmployeeFrom;
@@ -32,9 +37,8 @@ public class UpdateDocumentMovRequest {
         this.readDate = readDate;
         this.finishDate = finishDate;
         this.isMesul = isMesul;
-    }
-
-    public UpdateDocumentMovRequest() {
+        this.parentId = parentId;
+        this.backNote = backNote;
     }
 
     @Override
@@ -53,7 +57,12 @@ public class UpdateDocumentMovRequest {
                 ", readDate=" + readDate +
                 ", finishDate=" + finishDate +
                 ", isMesul=" + isMesul +
+                ", parentId=" + parentId +
+                ", backNote='" + backNote + '\'' +
                 '}';
+    }
+
+    public UpdateDocumentMovRequest() {
     }
 
     public long getIdDocumentMov() {
@@ -158,5 +167,22 @@ public class UpdateDocumentMovRequest {
 
     public void setIsMesul(int isMesul) {
         this.isMesul = isMesul;
+    }
+
+    public long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(long parentId) {
+        this.parentId = parentId;
+    }
+
+    @Nullable
+    public String getBackNote() {
+        return backNote;
+    }
+
+    public void setBackNote(@Nullable String backNote) {
+        this.backNote = backNote;
     }
 }

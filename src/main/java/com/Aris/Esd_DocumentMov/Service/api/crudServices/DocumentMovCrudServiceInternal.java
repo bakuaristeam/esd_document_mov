@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class DocumentMovCrudServiceInternal {
 
@@ -19,10 +21,10 @@ public class DocumentMovCrudServiceInternal {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public ResponseForDocSend updateDocMoveForDocSend(long idEmpFrom, long idDocument){
+    public ResponseForDocSend updateDocMoveForDocSend(long idEmpTo, long idDocument){
         ResponseForDocSend response  =  new ResponseForDocSend();
         try{
-            DocumentMov docMov = repoDocumentMov.findByIdDocumentAndIsActiveAndIdEmployeeFrom(idDocument, 1, idEmpFrom);
+            DocumentMov docMov = repoDocumentMov.findByIdDocumentAndIsActiveAndIdEmployeeTo(idDocument, 1, idEmpTo);
             if(docMov!=null){
                 docMov.setIsActive(0);
                 repoDocumentMov.save(docMov);
@@ -30,7 +32,7 @@ public class DocumentMovCrudServiceInternal {
                 response.setServerMessage("Doc send");
             }else{
                 logger.info("doc move not found maybe its first move..");
-                response.setServerCode(200);
+                response.setServerCode(220);
                 response.setServerMessage("its first time move");
             }
         }catch (Exception e){
@@ -41,6 +43,34 @@ public class DocumentMovCrudServiceInternal {
         return response;
     }
 
+    //    senedi geri cekme
+    public ResponseForDocSend retractTheDocument(long idDoc,long idEmpFrom,int isDelete){
+        ResponseForDocSend response=new ResponseForDocSend();
+        try{
+            DocumentMov documentMov=new DocumentMov();
+            List<DocumentMov> docmov=repoDocumentMov.findByIdDocumentAndIdEmployeeFromAndIsDeleted(idDoc,idEmpFrom,0);
+
+            if(docmov.size()>1){
+
+            }
+
+//                documentMov.setIdDocument(idDoc);
+//                documentMov.setIdEmployeeFrom(idEmpFrom);
+//                documentMov.setIsRead(1);
+//                documentMov.setIsDeleted(1);
+//                repoDocumentMov.save(documentMov);
+
+
+
+        }catch (Exception e){
+        response.setServerCode(100);
+        response.setServerMessage("Problem occurred when sending doc");
+        logger.error("Error sending doc : ",e);
+    }
+        return response;
+    }
+
+
 
     public DocumentMovResponse saveDocumentMov(SaveDocumentMovRequest saveDocumentMovRequest) {
         DocumentMovResponse documentMovResponse= new DocumentMovResponse();
@@ -49,8 +79,8 @@ public class DocumentMovCrudServiceInternal {
             documentMov.setIdDocument(saveDocumentMovRequest.getIdDocument());
             documentMov.setIdEmployeeFrom(saveDocumentMovRequest.getIdEmployeeFrom());
             documentMov.setIdEmployeeTo(saveDocumentMovRequest.getIdEmployeeTo());
-            documentMov.setIsActive(saveDocumentMovRequest.getIsActive());
-            documentMov.setIsDeleted(saveDocumentMovRequest.getIsDeleted());
+            documentMov.setIsActive(1);
+            documentMov.setIsDeleted(0);
             documentMov.setNote(saveDocumentMovRequest.getNote());
             documentMov.setSendDate(saveDocumentMovRequest.getSendDate());
             documentMov.setIsAccepted(0);
@@ -58,8 +88,11 @@ public class DocumentMovCrudServiceInternal {
             documentMov.setReadDate(saveDocumentMovRequest.getReadDate());
             documentMov.setFinishDate(saveDocumentMovRequest.getFinishDate());
             documentMov.setIsMesul(saveDocumentMovRequest.getIsMesul());
+            documentMov.setIsBirlesme(0);
+            documentMov.setIsFinished(0);
 
-           documentMov=repoDocumentMov.save(documentMov);
+
+            documentMov=repoDocumentMov.save(documentMov);
            documentMovResponse.setDocumentMov(documentMov);
             documentMovResponse.setServerCode(200);
             documentMovResponse.setServerMessage("OK");
@@ -94,11 +127,13 @@ public class DocumentMovCrudServiceInternal {
                 docMov.setNote(updateDocumentMovRequest.getNote());
                 docMov.setIsDeleted(updateDocumentMovRequest.getIsDeleted());
                 docMov.setSendDate(updateDocumentMovRequest.getSendDate());
-                docMov.setIsAccepted(1);
-                docMov.setIsRead(0);
+                docMov.setIsAccepted(updateDocumentMovRequest.getIsAccepted());
+                docMov.setIsRead(updateDocumentMovRequest.getIsRead());
                 docMov.setReadDate(updateDocumentMovRequest.getReadDate());
                 docMov.setIsMesul(updateDocumentMovRequest.getIsMesul());
                 docMov.setFinishDate(updateDocumentMovRequest.getFinishDate());
+                docMov.setIsBirlesme(0);
+                docMov.setIsFinished(0);
 
 
                docMov=repoDocumentMov.save(docMov);
@@ -118,6 +153,10 @@ public class DocumentMovCrudServiceInternal {
         }
         return documentMovResponse;
     }
+
+
+
+
 
 
      public DocumentMovResponse deleteDocumentMov(long idDocumentMov) {

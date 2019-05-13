@@ -1,5 +1,6 @@
 package com.Aris.Esd_DocumentMov.Service.api.searchServices;
 
+import com.Aris.Esd_DocumentMov.Service.api.searchServices.internal.ResponseDocCount;
 import com.Aris.Esd_DocumentMov.Service.api.searchServices.internal.ResponseSearchDocumentMov;
 import com.Aris.Esd_DocumentMov.Service.api.searchServices.internal.ResponseSearchListDocumentMov;
 import com.Aris.Esd_DocumentMov.Service.internal.ResponseForDocSend;
@@ -79,11 +80,49 @@ public class DocumentMocSearchServices {
     }
 
 
-    //    @GetMapping("/getDocMovByIdDocByIsActive/{idDoc}")
-//    public ResponseSearchListDocumentMov getDocMovByIdDocByIsActive(@PathVariable("idDoc") long idDoc){
-//        logger.info("esd_DocumentMov_idDocAndIsVisible->search->request : {}",idDoc);
-//        return documentMovSearchServiceInternal.getDocMovByidDocByIsActive(idDoc);
-//    }
+        @GetMapping("/getDocMovByIdDocByIsActive/{idDoc}")
+    public ResponseSearchListDocumentMov getDocMovByIdDocByIsActive(@PathVariable("idDoc") long idDoc){
+        logger.info("esd_DocumentMov_idDocAndIsVisible->search->request : {}",idDoc);
+        return documentMovSearchServiceInternal.getDocMovByidDocByIsActive(idDoc);
+    }
+
+    //docTrayektoriya ucun
+    @GetMapping("/getDocMovByIdDocAndByParentId/{idDoc}/{parentId}")
+    public ResponseSearchListDocumentMov getDocMovByIdDocAndByIdParent(@PathVariable("idDoc") long idDoc,
+                                                                   @PathVariable("parentId")long parentId){
+
+        logger.info("esd_DocumentMov_idDocAndIsVisible->search->request : {}",idDoc+parentId);
+        return documentMovSearchServiceInternal.getDocMovByIdDocAndByIdParent(idDoc,parentId);
+    }
+
+
+
+    //docCombine
+    @GetMapping("/getDocMovByIdDocAndIsActiveAndIsDelete/{idDoc}")
+    public ResponseSearchListDocumentMov getDocMovByIdDocAndIsActiveAndIsDelete(@PathVariable("idDoc") long idDoc){
+        logger.info("esd_DocumentMov_idDocAndIsVisible->search->request : {}",idDoc);
+        return documentMovSearchServiceInternal.getDocMovByIdDocAndIsActiveAndIsDelete(idDoc);
+    }
+
+
+    @GetMapping("/getDocMovByIdDocAndIsActiveAndIsDelete/{idDoc}/{idEmpTo}")
+    public ResponseSearchListDocumentMov getDocMovByIdDocAndIsActiveAndIsDelete(@PathVariable("idDoc") long idDoc,
+                                                                                @PathVariable("idEmpTo")long idEmpTo){
+        logger.info("esd_DocumentMov_IdDocAndIsActiveAndIsDelete->search->request : {}",idDoc);
+        return documentMovSearchServiceInternal.getDocMovByDocumentAndIdEmployeeToAndIsActiveAndIsDeleted(idDoc,idEmpTo);
+    }
+
+    @GetMapping("/setDocMovAccepted/{idDocMov}/{finishedDate}")
+    public ResponseSearchDocumentMov setDocMovAccepted(@PathVariable("idDocMov") long idDocMov,
+                                                      @PathVariable("finishedDate")long finishDate){
+        logger.info("esd_DocumentMov_idDocumentMovIsActiveIsDelete->search->request : {}",idDocMov,finishDate);
+        return documentMovSearchServiceInternal.setDocMovAccepted(finishDate,idDocMov);
+    }
+
+    @GetMapping("/getDocCount/{idEmp}")
+    public ResponseDocCount getCount(@PathVariable("idEmp")long idEmp){
+        return documentMovSearchServiceInternal.getDocCount(idEmp);
+    }
 
     @GetMapping("/documentMov/all")
     public List<DocumentMov> getStudents(){

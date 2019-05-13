@@ -1,5 +1,7 @@
 package com.Aris.Esd_DocumentMov.db.entities;
 
+import org.springframework.lang.Nullable;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -23,8 +25,13 @@ public class DocumentMov{
     private long readDate;
     private long finishDate;
     private int isMesul;
+    private long parentId;
+    @Nullable
+    private String backNote;
+    private int isBirlesme;
+    private int isFinished;
 
-    public DocumentMov(long idDocument, long idEmployeeFrom, long idEmployeeTo, int isActive, int isDeleted, String note, long sendDate, int isAccepted, int isRead, long readDate, long finishDate, int isMesul) {
+    public DocumentMov(long idDocument, long idEmployeeFrom, long idEmployeeTo, int isActive, int isDeleted, String note, long sendDate, int isAccepted, int isRead, long readDate, long finishDate, int isMesul, long parentId, @Nullable String backNote, int isBirlesme, int isFinished) {
         this.idDocument = idDocument;
         this.idEmployeeFrom = idEmployeeFrom;
         this.idEmployeeTo = idEmployeeTo;
@@ -37,6 +44,10 @@ public class DocumentMov{
         this.readDate = readDate;
         this.finishDate = finishDate;
         this.isMesul = isMesul;
+        this.parentId = parentId;
+        this.backNote = backNote;
+        this.isBirlesme = isBirlesme;
+        this.isFinished = isFinished;
     }
 
     public DocumentMov() {
@@ -58,6 +69,10 @@ public class DocumentMov{
                 ", readDate=" + readDate +
                 ", finishDate=" + finishDate +
                 ", isMesul=" + isMesul +
+                ", parentId=" + parentId +
+                ", backNote='" + backNote + '\'' +
+                ", isBirlesme=" + isBirlesme +
+                ", isFinished=" + isFinished +
                 '}';
     }
 
@@ -163,5 +178,38 @@ public class DocumentMov{
 
     public void setIsMesul(int isMesul) {
         this.isMesul = isMesul;
+    }
+
+    public long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(long parentId) {
+        this.parentId = parentId;
+    }
+
+    @Nullable
+    public String getBackNote() {
+        return backNote;
+    }
+
+    public void setBackNote(@Nullable String backNote) {
+        this.backNote = backNote;
+    }
+
+    public int getIsBirlesme() {
+        return isBirlesme;
+    }
+
+    public void setIsBirlesme(int isBirlesme) {
+        this.isBirlesme = isBirlesme;
+    }
+
+    public int getIsFinished() {
+        return isFinished;
+    }
+
+    public void setIsFinished(int isFinished) {
+        this.isFinished = isFinished;
     }
 }

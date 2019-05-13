@@ -1,5 +1,7 @@
 package com.Aris.Esd_DocumentMov.Service.api.crudServices.internal;
 
+import org.springframework.lang.Nullable;
+
 import java.util.Date;
 
 public class SaveDocumentMovRequest {
@@ -16,8 +18,12 @@ public class SaveDocumentMovRequest {
     private long readDate;
     private long finishDate;
     private int isMesul;
+    private long parentId;
+    @Nullable
+    private String backNote;
 
-    public SaveDocumentMovRequest(long idDocument, long idEmployeeFrom, long idEmployeeTo, int isActive, int isDeleted, String note, long sendDate, int isAccepted, int isRead, long readDate, long finishDate, int isMesul) {
+
+    public SaveDocumentMovRequest(long idDocument, long idEmployeeFrom, long idEmployeeTo, int isActive, int isDeleted, String note, long sendDate, int isAccepted, int isRead, long readDate, long finishDate, int isMesul, long parentId, @Nullable String backNote) {
         this.idDocument = idDocument;
         this.idEmployeeFrom = idEmployeeFrom;
         this.idEmployeeTo = idEmployeeTo;
@@ -30,27 +36,11 @@ public class SaveDocumentMovRequest {
         this.readDate = readDate;
         this.finishDate = finishDate;
         this.isMesul = isMesul;
+        this.parentId = parentId;
+        this.backNote = backNote;
     }
 
     public SaveDocumentMovRequest() {
-    }
-
-    @Override
-    public String toString() {
-        return "SaveDocumentMovRequest{" +
-                "idDocument=" + idDocument +
-                ", idEmployeeFrom=" + idEmployeeFrom +
-                ", idEmployeeTo=" + idEmployeeTo +
-                ", isActive=" + isActive +
-                ", isDeleted=" + isDeleted +
-                ", note='" + note + '\'' +
-                ", sendDate=" + sendDate +
-                ", isAccepted=" + isAccepted +
-                ", isRead=" + isRead +
-                ", readDate=" + readDate +
-                ", finishDate=" + finishDate +
-                ", isMesul=" + isMesul +
-                '}';
     }
 
     public long getIdDocument() {
@@ -147,5 +137,22 @@ public class SaveDocumentMovRequest {
 
     public void setIsMesul(int isMesul) {
         this.isMesul = isMesul;
+    }
+
+    public long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(long parentId) {
+        this.parentId = parentId;
+    }
+
+    @Nullable
+    public String getBackNote() {
+        return backNote;
+    }
+
+    public void setBackNote(@Nullable String backNote) {
+        this.backNote = backNote;
     }
 }
