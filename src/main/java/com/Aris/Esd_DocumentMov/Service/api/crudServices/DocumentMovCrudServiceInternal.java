@@ -1,16 +1,21 @@
 package com.Aris.Esd_DocumentMov.Service.api.crudServices;
 
-import com.Aris.Esd_DocumentMov.Service.internal.*;
 import com.Aris.Esd_DocumentMov.Service.api.crudServices.internal.SaveDocumentMovRequest;
+import com.Aris.Esd_DocumentMov.Service.internal.*;
 import com.Aris.Esd_DocumentMov.Service.api.crudServices.internal.UpdateDocumentMovRequest;
 import com.Aris.Esd_DocumentMov.db.entities.DocumentMov;
 import com.Aris.Esd_DocumentMov.db.repo.RepoDocumentMov;
+import com.Aris.Esd_DocumentMov.utill.HazelCastUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.time.DayOfWeek;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 
 @Component
 public class DocumentMovCrudServiceInternal {
@@ -18,18 +23,23 @@ public class DocumentMovCrudServiceInternal {
     @Autowired
     RepoDocumentMov repoDocumentMov;
 
+    @Autowired
+    HazelCastUtility hazelCastUtility;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public ResponseForDocSend updateDocMoveForDocSend(long idEmpTo, long idDocument){
+    public ResponseForDocSend updateDocMoveForDocSend(long idDocumentMov,long idEmpTo){
         ResponseForDocSend response  =  new ResponseForDocSend();
+        DocumentMov docMov = repoDocumentMov.findByIdDocumentMovAndAndIdEmployeeToAndIsActive(idDocumentMov, idEmpTo,1);
+        logger.info(" updateDocMoveForDocSend docMov :{}",docMov);
         try{
-            DocumentMov docMov = repoDocumentMov.findByIdDocumentAndIsActiveAndIdEmployeeTo(idDocument, 1, idEmpTo);
             if(docMov!=null){
                 docMov.setIsActive(0);
                 repoDocumentMov.save(docMov);
                 response.setServerCode(200);
                 response.setServerMessage("Doc send");
+
+                logger.info("repoDocMov :{}",repoDocumentMov.toString());
             }else{
                 logger.info("doc move not found maybe its first move..");
                 response.setServerCode(220);
@@ -44,31 +54,31 @@ public class DocumentMovCrudServiceInternal {
     }
 
     //    senedi geri cekme
-    public ResponseForDocSend retractTheDocument(long idDoc,long idEmpFrom,int isDelete){
-        ResponseForDocSend response=new ResponseForDocSend();
-        try{
-            DocumentMov documentMov=new DocumentMov();
-            List<DocumentMov> docmov=repoDocumentMov.findByIdDocumentAndIdEmployeeFromAndIsDeleted(idDoc,idEmpFrom,0);
-
-            if(docmov.size()>1){
-
-            }
-
-//                documentMov.setIdDocument(idDoc);
-//                documentMov.setIdEmployeeFrom(idEmpFrom);
-//                documentMov.setIsRead(1);
-//                documentMov.setIsDeleted(1);
-//                repoDocumentMov.save(documentMov);
-
-
-
-        }catch (Exception e){
-        response.setServerCode(100);
-        response.setServerMessage("Problem occurred when sending doc");
-        logger.error("Error sending doc : ",e);
-    }
-        return response;
-    }
+//    public ResponseForDocSend retractTheDocument(long idDoc,long idEmpFrom,int isDelete){
+//        ResponseForDocSend response=new ResponseForDocSend();
+//        try{
+//            DocumentMov documentMov=new DocumentMov();
+//            List<DocumentMov> docmov=repoDocumentMov.findByIdDocumentAndIdEmployeeFromAndIsDeleted(idDoc,idEmpFrom,0);
+//
+//            if(docmov.size()>1){
+//
+//            }
+//
+////                documentMov.setIdDocument(idDoc);
+////                documentMov.setIdEmployeeFrom(idEmpFrom);
+////                documentMov.setIsRead(1);
+////                documentMov.setIsDeleted(1);
+////                repoDocumentMov.save(documentMov);
+//
+//
+//
+//        }catch (Exception e){
+//        response.setServerCode(100);
+//        response.setServerMessage("Problem occurred when sending doc");
+//        logger.error("Error sending doc : ",e);
+//    }
+//        return response;
+//    }
 
 
 
@@ -90,9 +100,21 @@ public class DocumentMovCrudServiceInternal {
             documentMov.setIsMesul(saveDocumentMovRequest.getIsMesul());
             documentMov.setIsBirlesme(0);
             documentMov.setIsFinished(0);
+            documentMov.setParentId(saveDocumentMovRequest.getParentId());
 
+            documentMov.setEnteredDate(saveDocumentMovRequest.getEnteredDate());
+
+//            documentMov.setTaskDate(saveDocumentMovRequest.getTaskDate());
+
+
+            documentMov.setTaskDate(saveDocumentMovRequest.getTaskDate());
+
+            documentMov.setChecked(saveDocumentMovRequest.isChecked());
 
             documentMov=repoDocumentMov.save(documentMov);
+            logger.info("documentMov :{}",documentMov);
+
+//            documentMov=hazelCastUtility.save(documentMov);
            documentMovResponse.setDocumentMov(documentMov);
             documentMovResponse.setServerCode(200);
             documentMovResponse.setServerMessage("OK");
@@ -106,6 +128,7 @@ public class DocumentMovCrudServiceInternal {
         }
         return documentMovResponse;
     }
+
 
     public DocumentMovResponse updateDocumentMov(UpdateDocumentMovRequest updateDocumentMovRequest) {
         DocumentMovResponse documentMovResponse= new DocumentMovResponse();
@@ -136,8 +159,12 @@ public class DocumentMovCrudServiceInternal {
                 docMov.setIsFinished(0);
 
 
-               docMov=repoDocumentMov.save(docMov);
-               documentMovResponse.setDocumentMov(docMov);
+                docMov.setEnteredDate(updateDocumentMovRequest.getEnteredDate());
+                docMov.setTaskDate(updateDocumentMovRequest.getTaskDate());
+                docMov.setChecked(updateDocumentMovRequest.isChecked());
+
+                docMov=repoDocumentMov.save(docMov);
+                documentMovResponse.setDocumentMov(docMov);
             }else{
                 documentMovResponse.setServerCode(200);
                 documentMovResponse.setServerMessage("OK");
@@ -157,19 +184,17 @@ public class DocumentMovCrudServiceInternal {
 
 
 
-
-
      public DocumentMovResponse deleteDocumentMov(long idDocumentMov) {
         DocumentMovResponse documentMovResponse= new DocumentMovResponse();
         try {
-            DocumentMov documentMov= repoDocumentMov.findByIdDocumentMovAndIsDeleted(idDocumentMov,1);
+            DocumentMov documentMov= repoDocumentMov.findByIdDocumentMovAndIsDeleted(idDocumentMov,0);
             if(documentMov!=null) {
                 documentMovResponse.setServerCode(200);
                 documentMovResponse.setServerMessage("OK");
                 documentMovResponse.setStatusMessage("Deleted");
                 logger.info("deleteDocument response : {}", documentMovResponse.toString());
 
-                documentMov.setIsDeleted(0);
+                documentMov.setIsDeleted(1);
                 documentMov=repoDocumentMov.save(documentMov);
                 documentMovResponse.setDocumentMov(documentMov);
             }else {
@@ -178,6 +203,9 @@ public class DocumentMovCrudServiceInternal {
                 documentMovResponse.setStatusMessage("file not found");
                 logger.info("updateDocument response : {}", documentMovResponse.toString());
             }
+//            hazelCastUtility.deleteDocMov(idDocumentMov);
+            documentMovResponse.setServerCode(200);
+            documentMovResponse.setServerMessage("DocMov deleted");
         } catch (Exception e) {
             documentMovResponse.setServerCode(100);
             documentMovResponse.setServerMessage("error");
@@ -186,7 +214,6 @@ public class DocumentMovCrudServiceInternal {
         }
         return documentMovResponse;
     }
-
 
 
 }

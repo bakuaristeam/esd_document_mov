@@ -22,8 +22,14 @@ public class UpdateDocumentMovRequest {
     private long parentId;
     @Nullable
     private String backNote;
+    private int isBirlesme;
+    private int isFinished;
+    private long enteredDate;
+    private long taskDate;
+    private String instruction;
+    private boolean isChecked;
 
-    public UpdateDocumentMovRequest(long idDocumentMov, long idDocument, long idEmployeeFrom, long idEmployeeTo, int isActive, int isDeleted, String note, long sendDate, int isAccepted, int isRead, long readDate, long finishDate, int isMesul, long parentId, @Nullable String backNote) {
+    public UpdateDocumentMovRequest(long idDocumentMov, long idDocument, long idEmployeeFrom, long idEmployeeTo, int isActive, int isDeleted, String note, long sendDate, int isAccepted, int isRead, long readDate, long finishDate, int isMesul, long parentId, @Nullable String backNote, int isBirlesme, int isFinished, long enteredDate, long taskDate, String instruction, boolean isChecked) {
         this.idDocumentMov = idDocumentMov;
         this.idDocument = idDocument;
         this.idEmployeeFrom = idEmployeeFrom;
@@ -39,6 +45,12 @@ public class UpdateDocumentMovRequest {
         this.isMesul = isMesul;
         this.parentId = parentId;
         this.backNote = backNote;
+        this.isBirlesme = isBirlesme;
+        this.isFinished = isFinished;
+        this.enteredDate = enteredDate;
+        this.taskDate = taskDate;
+        this.instruction = instruction;
+        this.isChecked = isChecked;
     }
 
     @Override
@@ -59,10 +71,13 @@ public class UpdateDocumentMovRequest {
                 ", isMesul=" + isMesul +
                 ", parentId=" + parentId +
                 ", backNote='" + backNote + '\'' +
+                ", isBirlesme=" + isBirlesme +
+                ", isFinished=" + isFinished +
+                ", enteredDate=" + enteredDate +
+                ", taskDate=" + taskDate +
+                ", instruction='" + instruction + '\'' +
+                ", isChecked=" + isChecked +
                 '}';
-    }
-
-    public UpdateDocumentMovRequest() {
     }
 
     public long getIdDocumentMov() {
@@ -184,5 +199,53 @@ public class UpdateDocumentMovRequest {
 
     public void setBackNote(@Nullable String backNote) {
         this.backNote = backNote;
+    }
+
+    public int getIsBirlesme() {
+        return isBirlesme;
+    }
+
+    public void setIsBirlesme(int isBirlesme) {
+        this.isBirlesme = isBirlesme;
+    }
+
+    public int getIsFinished() {
+        return isFinished;
+    }
+
+    public void setIsFinished(int isFinished) {
+        this.isFinished = isFinished;
+    }
+
+    public long getEnteredDate() {
+        return enteredDate;
+    }
+
+    public void setEnteredDate(long enteredDate) {
+        this.enteredDate = enteredDate;
+    }
+
+    public long getTaskDate() {
+        return taskDate;
+    }
+
+    public void setTaskDate(long taskDate) {
+        this.taskDate = taskDate;
+    }
+
+    public String getInstruction() {
+        return instruction;
+    }
+
+    public void setInstruction(String instruction) {
+        this.instruction = instruction;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
     }
 }

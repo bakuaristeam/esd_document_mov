@@ -41,6 +41,7 @@ public class DocumentMocSearchServices {
         return documentMovSearchServiceInternal.getDocMovByIdEmpTo(idEmpTo);
     }
 
+
     @GetMapping("/getDocMovByIdEmpFrom/{idEmpFrom}")
     public ResponseSearchListDocumentMov getDocMovByIdEmpFrom(@PathVariable("idEmpFrom") long idEmpFrom){
         logger.info("esd_DocumentMov_idEmployeeFrom->search->request : {}",idEmpFrom);
@@ -115,8 +116,8 @@ public class DocumentMocSearchServices {
     @GetMapping("/setDocMovAccepted/{idDocMov}/{finishedDate}")
     public ResponseSearchDocumentMov setDocMovAccepted(@PathVariable("idDocMov") long idDocMov,
                                                       @PathVariable("finishedDate")long finishDate){
-        logger.info("esd_DocumentMov_idDocumentMovIsActiveIsDelete->search->request : {}",idDocMov,finishDate);
-        return documentMovSearchServiceInternal.setDocMovAccepted(finishDate,idDocMov);
+        logger.info("esd_DocumentMov /setDocMovAccepted idDocMov {},finishDate :{}",idDocMov,finishDate);
+        return documentMovSearchServiceInternal.setDocMovAccepted(idDocMov,finishDate);
     }
 
     @GetMapping("/getDocCount/{idEmp}")
@@ -134,6 +135,28 @@ public class DocumentMocSearchServices {
         return students;
     }
 
+    //-----------------------------Deyisiklikler-------------------------------------------------
 
+
+
+    @GetMapping("/getDocMovFinishedDoc/{idEmpTo}")
+    public ResponseSearchListDocumentMov getDocMovByFinished(@PathVariable("idEmpTo") long idEmpTo){
+        logger.info("esd_DocumentMov_IdEmployeeToo->search->request : {}",idEmpTo);
+        return documentMovSearchServiceInternal.getDocMovByIdEmpToFinishedDoc(idEmpTo);
+    }
+
+
+    @GetMapping("/getDocMov/{idDocMov}")
+    public ResponseSearchDocumentMov setDocMovAccepted(@PathVariable("idDocMov") long idDocMov){
+        logger.info("esd_DocumentMov idDocMov {}",idDocMov);
+        return documentMovSearchServiceInternal.getDocMov(idDocMov);
+    }
+
+
+    @GetMapping("/getDocMovByAllDocIdEmpTo/{idEmpTo}")
+    public ResponseSearchListDocumentMov getDocMovAllByIdEmpTo(@PathVariable("idEmpTo") long idEmpTo){
+        logger.info("esd_DocumentMov_IdEmployeeToo->search->request : {}",idEmpTo);
+        return documentMovSearchServiceInternal.getDocMovAllDocByIdEmpTo(idEmpTo);
+    }
 
 }

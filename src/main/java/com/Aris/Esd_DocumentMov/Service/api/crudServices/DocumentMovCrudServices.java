@@ -1,7 +1,7 @@
 package com.Aris.Esd_DocumentMov.Service.api.crudServices;
 
-import com.Aris.Esd_DocumentMov.Service.internal.DocumentMovResponse;
 import com.Aris.Esd_DocumentMov.Service.api.crudServices.internal.SaveDocumentMovRequest;
+import com.Aris.Esd_DocumentMov.Service.internal.DocumentMovResponse;
 import com.Aris.Esd_DocumentMov.Service.api.crudServices.internal.UpdateDocumentMovRequest;
 import com.Aris.Esd_DocumentMov.Service.internal.ResponseForDocSend;
 import org.slf4j.Logger;
@@ -44,9 +44,10 @@ public class DocumentMovCrudServices {
     }
 
     @GetMapping("/sendDoc/{idDoc}/{idEmpFrom}")
-    public ResponseForDocSend sendingDocUpdate(@PathVariable("idDoc") long idDoc,
-                                               @PathVariable("idEmpFrom") long idEmpFrom){
-        return documentMovCrudServiceInternal.updateDocMoveForDocSend(idEmpFrom,idDoc);
+    public ResponseForDocSend sendingDocUpdate(@PathVariable("idDoc") long idDocumentMov,
+                                               @PathVariable("idEmpFrom") long idEmpTo){
+        logger.info("iddoc :{} ,idEmpTo :{}",idDocumentMov,idEmpTo);
+        return documentMovCrudServiceInternal.updateDocMoveForDocSend(idDocumentMov,idEmpTo);
     }
 
 }

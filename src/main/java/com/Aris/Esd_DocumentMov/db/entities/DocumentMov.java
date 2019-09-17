@@ -3,11 +3,12 @@ package com.Aris.Esd_DocumentMov.db.entities;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "documentMov")
-public class DocumentMov{
+public class DocumentMov {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idDocumentMov", nullable = false, unique = true)
@@ -30,8 +31,15 @@ public class DocumentMov{
     private String backNote;
     private int isBirlesme;
     private int isFinished;
+    private long enteredDate;
+    private long taskDate;
+    private boolean checked;
 
-    public DocumentMov(long idDocument, long idEmployeeFrom, long idEmployeeTo, int isActive, int isDeleted, String note, long sendDate, int isAccepted, int isRead, long readDate, long finishDate, int isMesul, long parentId, @Nullable String backNote, int isBirlesme, int isFinished) {
+
+    public DocumentMov() {
+    }
+
+    public DocumentMov(long idDocument, long idEmployeeFrom, long idEmployeeTo, int isActive, int isDeleted, String note, long sendDate, int isAccepted, int isRead, long readDate, long finishDate, int isMesul, long parentId, @Nullable String backNote, int isBirlesme, int isFinished, long enteredDate, long taskDate, boolean checked) {
         this.idDocument = idDocument;
         this.idEmployeeFrom = idEmployeeFrom;
         this.idEmployeeTo = idEmployeeTo;
@@ -48,9 +56,9 @@ public class DocumentMov{
         this.backNote = backNote;
         this.isBirlesme = isBirlesme;
         this.isFinished = isFinished;
-    }
-
-    public DocumentMov() {
+        this.enteredDate = enteredDate;
+        this.taskDate = taskDate;
+        this.checked = checked;
     }
 
     @Override
@@ -73,6 +81,9 @@ public class DocumentMov{
                 ", backNote='" + backNote + '\'' +
                 ", isBirlesme=" + isBirlesme +
                 ", isFinished=" + isFinished +
+                ", enteredDate=" + enteredDate +
+                ", taskDate=" + taskDate +
+                ", checked=" + checked +
                 '}';
     }
 
@@ -211,5 +222,34 @@ public class DocumentMov{
 
     public void setIsFinished(int isFinished) {
         this.isFinished = isFinished;
+    }
+
+    public long getEnteredDate() {
+        return enteredDate;
+    }
+
+    public void setEnteredDate(long enteredDate) {
+        this.enteredDate = enteredDate;
+    }
+
+    public long getTaskDate() {
+        return taskDate;
+    }
+
+    public void setTaskDate(long taskDate) {
+        this.taskDate = taskDate;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }
